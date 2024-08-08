@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiddlewarePOC.Data;
+using MiddlewarePOC.Middlewares;
 using MiddlewarePOC.Models;
 
 namespace MiddlewarePOC.Controllers
@@ -18,7 +18,14 @@ namespace MiddlewarePOC.Controllers
 
 
         [HttpGet]
+        [ServiceFilter(typeof(GetRequestLoggingFilter))] // Apply the custom filter
         public async Task<List<Person>> Get()
+        {
+            return await _dataContext.Persons.ToListAsync();
+        }
+
+        [HttpGet("alternative")] // Changed route to differentiate the method
+        public async Task<List<Person>> Gets()
         {
             return await _dataContext.Persons.ToListAsync();
         }
